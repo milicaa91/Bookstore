@@ -1,0 +1,31 @@
+services:
+  authenticationservice.api:
+    image: ${DOCKER_REGISTRY-}authenticationserviceapi
+    build:
+      context: .
+      dockerfile: AuthenticationService/src/AuthenticationService.API/Dockerfile
+    environment:
+    - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=UserDB;User Id=sa;Password=82_WUc@@jAOeRee8;
+    depends_on:
+    - sqlserver
+
+  bookcatalogservice.api:
+    image: ${DOCKER_REGISTRY-}bookcatalogserviceapi
+    build:
+      context: .
+      dockerfile: BookCatalogService/src/BookCatalogService.API/Dockerfile
+
+  sqlserver:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: sqlserver.container
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "82_WUc@@jAOeRee8"
+      ACCEPT_EULA: "Y"
+    restart: always
+    volumes:
+      - sqlserver_data:/var/opt/mssql  # Persistent storage for SQL Server
+
+volumes:
+    sqlserver_data:
