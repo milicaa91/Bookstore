@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: AuthenticationService/src/AuthenticationService.API/Dockerfile
     environment:
-    - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=UserDB;User Id=sa;Password=82_WUc@@jAOeRee8;
+    - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=UserDB;User Id=sa;Password=82_WUc@@jAOeRee8;TrustServerCertificate=True;
     depends_on:
     - sqlserver
 
