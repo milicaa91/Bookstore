@@ -26,6 +26,14 @@ namespace AuthenticationService.Infrastructure.Repositories
             return storedToken;
         }
 
+        public async Task<RefreshToken> GetByUserId(string userId)
+        {
+            var storedToken = await _context.RefreshTokens
+                .FirstOrDefaultAsync(rt => rt.UserId == userId && rt.ExpiryDate > DateTime.UtcNow && !rt.IsRevoked);
+
+            return storedToken;
+        }
+
         public async Task RevokeAsync(string token)
         {
             var refreshToken = await GetByTokenAsync(token);

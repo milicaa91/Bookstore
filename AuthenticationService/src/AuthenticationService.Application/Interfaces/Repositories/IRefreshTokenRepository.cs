@@ -11,6 +11,7 @@ namespace AuthenticationService.Application.Interfaces.Repositories
     {
         Task AddAsync(RefreshToken refreshToken);
         Task<RefreshToken> GetByTokenAsync(string token);
+        Task<RefreshToken> GetByUserId(string userId);
         Task RevokeAsync(string token);
         Task<bool> IsTokenValidAsync(string token);
     }

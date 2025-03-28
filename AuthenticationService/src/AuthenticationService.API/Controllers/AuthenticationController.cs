@@ -43,7 +43,7 @@ namespace AuthenticationService.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<int>> LoginUser(LoginRequest loginRequest, CancellationToken cancellationToken)
+        public async Task<ActionResult<LoginResponse>> LoginUser(LoginRequest loginRequest, CancellationToken cancellationToken)
         {
             var loginCommand = new LoginCommand(loginRequest.Username, loginRequest.Password);
             var result = await _sender.Send(loginCommand, cancellationToken);
@@ -93,20 +93,18 @@ namespace AuthenticationService.API.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout(CancellationToken cancellationToken)
         {
-            //var logoutCommand = new LogoutCommand(refreshToken.CurrentRefreshToken);
-            //var result = await _sender.Send(addRefreshTokenCommand, cancellationToken);
+            var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier);
 
-            //return Ok(result);
+            if (userIdClaim == null)
+                return Unauthorized("User is not authenticated");
 
-            //TODO implement logout
-            //var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == refreshToken);
-            //if (storedToken == null)
-            //    return Unauthorized("Failed to revoke token.");
+            if (!Guid.TryParse(userIdClaim.Value, out Guid userId))
+                return BadRequest("Invalid user ID");
 
-            //storedToken.IsRevoked = true;
-            //await _context.SaveChangesAsync();
+            var logoutCommand = new LogoutCommand(userId.ToString());
+            var result = await _sender.Send(logoutCommand, cancellationToken);          
 
-            return Ok("Logged out.");
+            return Ok(result);
         }
     }
 }
