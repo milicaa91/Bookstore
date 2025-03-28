@@ -2,15 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AuthenticationService.Application.Interfaces.Repositories
 {
-    public interface IAuthenticationRepository
+    public interface IRefreshTokenRepository
     {
-        Task<ApplicationUser> GetUserByIdAsync(string id, CancellationToken cancellationToken = default);
+        Task AddAsync(RefreshToken refreshToken);
+        Task<RefreshToken> GetByTokenAsync(string token);
+        Task RevokeAsync(string token);
+        Task<bool> IsTokenValidAsync(string token);
     }
 }

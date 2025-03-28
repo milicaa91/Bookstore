@@ -47,7 +47,7 @@ namespace AuthenticationService.API.Extensions
 
         private static async Task SeedAdminUserAsync(UserManager<ApplicationUser> userManager)
         {
-            const string adminEmail = "adminuser@gmail.com";
+            const string adminEmail = "adminuser@gmail.com"; //TODO MN move to appsettings
 
             if (await userManager.FindByEmailAsync(adminEmail) == null)
             {

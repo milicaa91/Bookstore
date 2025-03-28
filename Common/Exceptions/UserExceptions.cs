@@ -15,4 +15,9 @@ namespace Common.Exceptions
     {
         public UserNotFoundException(string message) : base(message) { }
     }
+
+    public class RoleNotFoundException : Exception
+    {
+        public RoleNotFoundException(string message) : base(message) { }
+    }
 }

@@ -1,14 +1,23 @@
-﻿using AuthenticationService.Application.Features.Users.Commands.Register;
+﻿using AuthenticationService.Application.Features.Users.Commands.Login;
+using AuthenticationService.Application.Features.Users.Commands.Logout;
+using AuthenticationService.Application.Features.Users.Commands.Refresh;
+using AuthenticationService.Application.Features.Users.Commands.Register;
+using AuthenticationService.Application.Features.Users.Commands.UpdateRole;
 using AuthenticationService.Application.Features.Users.Queries;
+using Azure.Core;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Threading;
+using LoginRequest = AuthenticationService.Application.Features.Users.Commands.Login.LoginRequest;
 
 namespace AuthenticationService.API.Controllers
 {
-    //[Authorize]
     [ApiController]
     [Route("api/auth")]
     public class AuthenticationController : ControllerBase
@@ -26,7 +35,7 @@ namespace AuthenticationService.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<int>> RegisterUser([FromBody] AddUserRequest request, CancellationToken cancellationToken)
         {
-            var addUserCommand = new AddUserCommand(request.Username, request.Password, request.Email);
+            var addUserCommand = new AddUserCommand(request.Username, request.Password, request.Email, request.FullName);
             var result = await _sender.Send(addUserCommand, cancellationToken);
 
             return Ok(result);
@@ -36,27 +45,68 @@ namespace AuthenticationService.API.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<int>> LoginUser(LoginRequest loginRequest, CancellationToken cancellationToken)
         {
-            //TODO rename
-            var getUserByEmailQuery = new GetUserByEmailQuery(loginRequest.Email, loginRequest.Password);
-            var result = await _sender.Send(getUserByEmailQuery, cancellationToken);
+            var loginCommand = new LoginCommand(loginRequest.Username, loginRequest.Password);
+            var result = await _sender.Send(loginCommand, cancellationToken);
 
             return Ok(result);
         }
 
+        [Authorize]
         [HttpGet("me")]
-        public async Task<ActionResult<int>> FetchLoggedUser(CancellationToken cancellationToken)
-        {
-            //TODO get user from token
+        public async Task<ActionResult<GetUserDetailsResponse>> FetchLoggedUser(CancellationToken cancellationToken)
+        {            
+            var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier);
 
-            return Ok();
+            if (userIdClaim == null)
+                return Unauthorized("User is not authenticated");
+
+            if (!Guid.TryParse(userIdClaim.Value, out Guid userId))
+                return BadRequest("Invalid user ID");
+
+            var query = new GetUserDetailsQuery(userId.ToString());
+            var result = await _sender.Send(query, cancellationToken);
+
+            return Ok(result);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("roles/{id}")]
+        public async Task<ActionResult<int>> UpdateRole(Guid id, [FromBody] UpdateRoleRequest request, CancellationToken cancellationToken)
+        {
+            var updateRoleCommand = new UpdateRoleCommand(id, request.Role);
+            var result = await _sender.Send(updateRoleCommand, cancellationToken);
+
+            return Ok(result);
         }
 
         [AllowAnonymous]
-        [HttpPut("roles/{id}")]
-        public async Task<ActionResult<int>> UpdateRole([FromQuery]string id, CancellationToken cancellationToken)
+        [HttpPost("refresh")]
+        public async Task<ActionResult<AddRefreshTokenResponse>> RefreshToken([FromBody] AddRefreshTokenRequest refreshToken, CancellationToken cancellationToken)
         {
-            //get user from token.
-            return Ok();
+            var addRefreshTokenCommand = new AddRefreshTokenCommand(refreshToken.CurrentRefreshToken);
+            var result = await _sender.Send(addRefreshTokenCommand, cancellationToken);
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout(CancellationToken cancellationToken)
+        {
+            //var logoutCommand = new LogoutCommand(refreshToken.CurrentRefreshToken);
+            //var result = await _sender.Send(addRefreshTokenCommand, cancellationToken);
+
+            //return Ok(result);
+
+            //TODO implement logout
+            //var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == refreshToken);
+            //if (storedToken == null)
+            //    return Unauthorized("Failed to revoke token.");
+
+            //storedToken.IsRevoked = true;
+            //await _context.SaveChangesAsync();
+
+            return Ok("Logged out.");
         }
     }
 }

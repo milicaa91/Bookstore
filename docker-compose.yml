@@ -4,6 +4,9 @@ services:
     build:
       context: .
       dockerfile: AuthenticationService/src/AuthenticationService.API/Dockerfile
+    ports:
+      - 5000:5000
+      - 5001:5001
     environment:
     - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=UserDB;User Id=sa;Password=82_WUc@@jAOeRee8;TrustServerCertificate=True;
     depends_on:

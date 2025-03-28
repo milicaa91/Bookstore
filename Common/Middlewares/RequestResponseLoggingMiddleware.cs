@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Common.Middlewares
 {
-    internal class RequestResponseLoggingMiddleware
+    public class RequestResponseLoggingMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<RequestResponseLoggingMiddleware> _logger;

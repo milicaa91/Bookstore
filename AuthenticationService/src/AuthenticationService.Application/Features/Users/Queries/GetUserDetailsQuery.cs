@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace AuthenticationService.Application.Features.Users.Queries
 {
-    public sealed record GetUserByEmailQuery(string email, string password) : IRequest<string>;
+    public sealed record GetUserDetailsQuery(string UserId) : IRequest<GetUserDetailsResponse>;
 }

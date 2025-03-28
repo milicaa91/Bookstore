@@ -1,15 +1,17 @@
-﻿using System;
+﻿using AuthenticationService.Application.Records;
+using AuthenticationService.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthenticationService.Application.Interfaces.Services
+namespace AuthenticationService.Application.Interfaces.Services.TokenGeneratorService
 {
     public interface ITokenGeneratorService
     {
-        string GenerateToken();
-        string RefreshToken(string token);
+        string GenerateAccessToken(TokenGeneratorRequest tokenGeneratorRequest);
+        string GenerateRefreshToken();
     }
 }
