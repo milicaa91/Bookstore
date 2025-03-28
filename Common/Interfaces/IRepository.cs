@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthenticationService.Application.Interfaces.Repositories
+namespace Common.Interfaces
 {
     public interface IRepository<TEntity, TId> where TEntity : class
     {

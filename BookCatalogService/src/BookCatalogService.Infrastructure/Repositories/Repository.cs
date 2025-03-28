@@ -1,28 +1,26 @@
-﻿using AuthenticationService.Application.Interfaces.Repositories;
-using Common.Interfaces;
+﻿using Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthenticationService.Infrastructure.Repositories
+namespace BookCatalogService.Infrastructure.Repositories
 {
     public class Repository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : class
     {
-        protected readonly ApplicationDbContext _context;  //TODO Changed to protected for testability
+        protected readonly BookDbContext _context;  //TODO Changed to protected for testability
         protected readonly DbSet<TEntity> _dbSet;
 
-        public Repository(ApplicationDbContext context)
+        public Repository(BookDbContext context)
         {
             _context = context;
             _dbSet = context.Set<TEntity>();
         }
 
-        public virtual async Task<TEntity?> GetByIdAsync(TId id)//TODO should this be virtual for testing
+        public async Task<TEntity?> GetByIdAsync(TId id)//TODO should this be virtual for testing
         {
             return await _dbSet.FindAsync(id);
         }

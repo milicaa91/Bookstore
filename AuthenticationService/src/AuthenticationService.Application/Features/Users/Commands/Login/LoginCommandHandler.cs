@@ -7,6 +7,7 @@ using AuthenticationService.Application.Interfaces.Services.TokenGeneratorServic
 using AuthenticationService.Application.Records;
 using AuthenticationService.Domain.Entities;
 using Common.Exceptions;
+using Common.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +30,7 @@ namespace AuthenticationService.Application.Features.Users.Commands.Login
         public LoginCommandHandler(ITokenGeneratorService tokenGeneratorService,
             UserManager<ApplicationUser> userManager,
             IRefreshTokenRepository refreshTokenRepository,
-            IUnitOfWork unitOfWork = null)
+            IUnitOfWork unitOfWork)
         {
             _tokenGeneratorService = tokenGeneratorService;
             _userManager = userManager;

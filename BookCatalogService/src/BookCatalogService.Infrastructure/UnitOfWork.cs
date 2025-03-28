@@ -1,18 +1,17 @@
-﻿using AuthenticationService.Application.Interfaces;
-using Common.Interfaces;
+﻿using Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthenticationService.Infrastructure
+namespace BookCatalogService.Infrastructure
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BookDbContext _context;
 
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWork(BookDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

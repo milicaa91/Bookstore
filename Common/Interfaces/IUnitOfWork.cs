@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthenticationService.Application.Interfaces
+namespace Common.Interfaces
 {
     public interface IUnitOfWork
     {

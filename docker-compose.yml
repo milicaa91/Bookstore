@@ -17,6 +17,13 @@ services:
     build:
       context: .
       dockerfile: BookCatalogService/src/BookCatalogService.API/Dockerfile
+    ports:
+      - 6000:6000
+      - 6001:6001
+    environment:
+    - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=BookDB;User Id=sa;Password=82_WUc@@jAOeRee8;TrustServerCertificate=True;
+    depends_on:
+    - sqlserver
 
   sqlserver:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
@@ -29,6 +36,15 @@ services:
     restart: always
     volumes:
       - sqlserver_data:/var/opt/mssql  # Persistent storage for SQL Server
+
+  seq.logs:
+    image: datalust/seq:latest
+    container_name: seq.log
+    environment:
+        ACCEPT_EULA: Y
+    ports:
+    - 5341:5341
+    - 8081:80
 
 volumes:
     sqlserver_data:

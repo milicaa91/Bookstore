@@ -5,6 +5,7 @@ using AuthenticationService.Application.Interfaces.Services.TokenGeneratorServic
 using AuthenticationService.Application.Records;
 using AuthenticationService.Domain.Entities;
 using Common.Exceptions;
+using Common.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;

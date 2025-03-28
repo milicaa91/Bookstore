@@ -2,6 +2,7 @@
 using AuthenticationService.Application.Interfaces.Repositories;
 using AuthenticationService.Domain.Entities;
 using AuthenticationService.Infrastructure.Migrations;
+using Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace AuthenticationService.Infrastructure.Repositories
 {
     public class RefreshTokenRepository : Repository<RefreshToken, string>, IRefreshTokenRepository
     {
-        public RefreshTokenRepository(ApplicationDbContext context, IUnitOfWork unitOfWork) : base(context)
+        public RefreshTokenRepository(ApplicationDbContext context) : base(context)
         {
         }
 

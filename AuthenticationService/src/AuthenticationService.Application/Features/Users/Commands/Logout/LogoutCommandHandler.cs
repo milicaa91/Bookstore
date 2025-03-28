@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Common.Exceptions;
+using Common.Interfaces;
 
 namespace AuthenticationService.Application.Features.Users.Commands.Logout
 {

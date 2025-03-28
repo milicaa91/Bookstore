@@ -8,6 +8,7 @@ using AuthenticationService.Infrastructure;
 using AuthenticationService.Infrastructure.Extensions;
 using AuthenticationService.Infrastructure.Repositories;
 using AuthenticationService.Infrastructure.Services.TokenGenerator;
+using Common.Interfaces;
 using Common.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
