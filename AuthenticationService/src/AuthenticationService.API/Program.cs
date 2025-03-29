@@ -22,20 +22,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration));
 
-//TODO Infrastructure replace as IndentityExtensions
-builder.Services.AddDbContext<ApplicationDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-    x => x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddDefaultTokenProviders();
-
-builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IAuthenticationRepository, AuthenticationRepository>(); // Register specific repository
-builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>(); // Register specific repository
-
+builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddCorsApp();
 builder.Services.AddApplication();
 builder.Services.AddAuthentication(builder.Configuration);
 
@@ -47,14 +35,16 @@ if (app.Environment.IsDevelopment())
 {
     await app.ApplyMigrations();
     await app.SeedRolesAndAdminAsync();
+    app.UseCors("AllowAll");
 }
-// Configure the HTTP request pipeline.
+else
+    app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 
 app.UseMiddleware<RequestResponseLoggingMiddleware>();
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
-//CORS
+
 app.UseAuthentication();
 app.UseAuthorization();
 

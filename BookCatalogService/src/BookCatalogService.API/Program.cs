@@ -14,6 +14,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddCorsApp();
 
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);
@@ -27,7 +28,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     await app.ApplyMigrations();
+    app.UseCors("AllowAll");
 }
+else
+    app.UseCors("AllowSpecificOrigin");
 
 app.UseHttpsRedirection();
 
