@@ -21,7 +21,6 @@ namespace BookCatalogService.Application.Features.Books.Queries
         {
             var books = await _bookRepository.GetAllAsync();
 
-            // Map Book entities to BookDto records
             var bookDtos = books.Select(book => new BookResponseModel(
                 book.Id,
                 book.Title,

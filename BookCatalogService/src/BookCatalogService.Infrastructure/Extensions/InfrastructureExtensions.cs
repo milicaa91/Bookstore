@@ -20,6 +20,11 @@ namespace BookCatalogService.Infrastructure.Extensions
                 options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                 x => x.MigrationsAssembly(typeof(BookDbContext).Assembly.FullName)));
 
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetConnectionString("RedisConnection");
+                options.InstanceName = "BookCatalog_";
+            });
             services.AddScoped<IBookRepository, BookRepository>(); // Register specific repository
             services.AddScoped<IUnitOfWork, UnitOfWork>(); // Register specific repository
 

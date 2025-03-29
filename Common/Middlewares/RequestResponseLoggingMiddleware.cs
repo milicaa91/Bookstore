@@ -32,22 +32,18 @@ namespace Common.Middlewares
 
             var originalBodyStream = context.Response.Body;
 
-            // Create a new memory stream to capture the response
             using (var responseBody = new MemoryStream())
             {
                 context.Response.Body = responseBody;
 
-                // Call the next middleware in the pipeline
                 await _next(context);
 
-                // Log the outgoing response
                 var response = await FormatResponse(context.Response);
                 _logger.LogInformation("Outgoing Response: {StatusCode} {Headers} {Body}",
                     context.Response.StatusCode,
                     context.Response.Headers,
                     response);
 
-                // Copy the captured response body back to the original stream
                 responseBody.Seek(0, SeekOrigin.Begin);
                 await responseBody.CopyToAsync(originalBodyStream);
                 context.Response.Body = originalBodyStream;

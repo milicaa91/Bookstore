@@ -14,11 +14,9 @@ namespace BookCatalogService.Application.Features.Books.Commands.DeleteBook
     public class DeleteBookCommandHandler : IRequestHandler<DeleteBookCommand, string>
     {
         private readonly IBookRepository _bookRepository;
-        private readonly IUnitOfWork _unitOfWork;
         public DeleteBookCommandHandler(IBookRepository bookRepository, IUnitOfWork unitOfWork)
         {
             _bookRepository = bookRepository;
-            _unitOfWork = unitOfWork;
         }
 
         public async Task<string> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
@@ -27,9 +25,8 @@ namespace BookCatalogService.Application.Features.Books.Commands.DeleteBook
 
             if (book is null) 
                 throw new BadRequestException($"Book with ID {request.Id} not found");
-
-             _bookRepository.Remove(book);
-            await _unitOfWork.SaveChangesAsync();
+            
+            await _bookRepository.DeleteAsync(book);
 
             return $"Book with ID {request.Id} deleted successfully";
         }

@@ -14,11 +14,9 @@ namespace BookCatalogService.Application.Features.Books.Commands.UpdateBook
     public class UpdateBookCommandHandler : IRequestHandler<UpdateBookCommand, string>
     {
         private readonly IBookRepository _bookRepository;
-        private readonly IUnitOfWork _unitOfWork;
         public UpdateBookCommandHandler(IBookRepository bookRepository, IUnitOfWork unitOfWork)
         {
             _bookRepository = bookRepository;
-            _unitOfWork = unitOfWork;
         }
 
         public async Task<string> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
@@ -35,8 +33,7 @@ namespace BookCatalogService.Application.Features.Books.Commands.UpdateBook
             book.Price = request.Price;
             book.StockQuantity = request.StockQuantity;
 
-            _bookRepository.Update(book);
-            await _unitOfWork.SaveChangesAsync();
+            await _bookRepository.UpdateAsync(book);
 
             return $"Book with ID {request.Id} updated successfully";
         }

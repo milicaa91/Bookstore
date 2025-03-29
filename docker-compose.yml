@@ -21,7 +21,8 @@ services:
       - 6000:6000
       - 6001:6001
     environment:
-    - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=BookDB;User Id=sa;Password=82_WUc@@jAOeRee8;TrustServerCertificate=True;
+    - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=BookDB;User Id=sa;Password=82_WUc@@jAOeRee8;TrustServerCertificate=True
+    - Redis__ConnectionString=redis:6379
     depends_on:
     - sqlserver
 
@@ -35,9 +36,19 @@ services:
       ACCEPT_EULA: "Y"
     restart: always
     volumes:
-      - sqlserver_data:/var/opt/mssql  # Persistent storage for SQL Server
+      - sqlserver_data:/var/opt/mssql
+  
+  redis:
+    image: redis:latest
+    container_name: redis.cache
+    ports:
+      - "6379:6379"
+    restart: always
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data 
 
-  seq.logs:
+  seq:
     image: datalust/seq:latest
     container_name: seq.log
     environment:
@@ -48,3 +59,5 @@ services:
 
 volumes:
     sqlserver_data:
+    redis_data:
+        driver: local
