@@ -36,7 +36,14 @@ namespace AuthenticationService.Infrastructure.Extensions
                 };
             });
 
-            services.AddAuthorization();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOperatorUserPolicy", policy =>
+                    policy.RequireRole("Admin", "Operator", "User"));
+
+                options.AddPolicy("AdminOperatorPolicy", policy =>
+                    policy.RequireRole("Admin", "Operator"));
+            });
             services.AddScoped<ITokenGeneratorService, TokenGeneratorService>();
 
             return services;

@@ -10,19 +10,18 @@ namespace BookCatalogService.Domain.Entities
 {
     public class Book
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
-        public string Author { get; set; }
+        public string Author { get; set; } = string.Empty;
 
         public Category Category { get; set; }
 
         public decimal Price { get; set; }
 
         public DateTime PublishedAt { get; set; }
-        
-        public int StockQuantity { get; set; }
 
+        public int StockQuantity { get; set; }
     }
 }

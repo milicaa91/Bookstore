@@ -24,7 +24,6 @@ namespace BookCatalogService.Application.Features.Books.Commands.AddBook
         {
             var book = new Book
             {
-                Id = Guid.NewGuid(),
                 Title = request.Title,
                 Author = request.Author,
                 Category = request.Category,

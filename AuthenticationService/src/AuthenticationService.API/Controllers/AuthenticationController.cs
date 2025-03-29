@@ -18,6 +18,7 @@ using LoginRequest = AuthenticationService.Application.Features.Users.Commands.L
 
 namespace AuthenticationService.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/auth")]
     public class AuthenticationController : ControllerBase
@@ -51,7 +52,6 @@ namespace AuthenticationService.API.Controllers
             return Ok(result);
         }
 
-        [Authorize]
         [HttpGet("me")]
         public async Task<ActionResult<GetUserDetailsResponse>> FetchLoggedUser(CancellationToken cancellationToken)
         {            
@@ -89,7 +89,6 @@ namespace AuthenticationService.API.Controllers
             return Ok(result);
         }
 
-        [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout(CancellationToken cancellationToken)
         {

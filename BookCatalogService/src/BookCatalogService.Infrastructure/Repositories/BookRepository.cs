@@ -1,4 +1,5 @@
-﻿using BookCatalogService.Application.Features.Books.Queries;
+﻿using Azure;
+using BookCatalogService.Application.Features.Books.Queries;
 using BookCatalogService.Application.Interfaces.Repositories;
 using BookCatalogService.Domain.Entities;
 using Common.Interfaces;
@@ -7,9 +8,11 @@ using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookCatalogService.Infrastructure.Repositories
 {
@@ -28,6 +31,50 @@ namespace BookCatalogService.Infrastructure.Repositories
         public async Task<bool> ExistsAsync(Guid id)
         {
             return await _dbSet.AnyAsync(b => b.Id == id);
+        }
+        public async Task<GetAllBooksResponse> GetPagedBooksAsync(GetAllBooksQuery request)
+        {
+            IQueryable<Book> query = _context.Books;
+
+            if (!string.IsNullOrWhiteSpace(request.Title))
+                query = query.Where(b => b.Title.Contains(request.Title));
+
+            if (!string.IsNullOrWhiteSpace(request.Author))
+                query = query.Where(b => b.Author.Contains(request.Author));
+
+            if (request.Category != 0)
+                query = query.Where(b => b.Category == request.Category);
+
+            query = request.SortOrder?.ToLower() == "desc" ? query.OrderByDescending(GetSortProperty(request)) : query.OrderBy(GetSortProperty(request));
+
+            var totalCount = await query.CountAsync();
+
+            var books = await query.Skip((request.PageNumber - 1) * request.PageSize)
+                                   .Take(request.PageSize).ToListAsync();
+
+            var response = new GetAllBooksResponse
+            {
+                TotalRecords = totalCount,
+                TotalPages = (int)Math.Ceiling((double)totalCount / request.PageSize),
+                Page = request.PageNumber,
+                PageSize = request.PageSize,
+                Books = books
+            };
+
+            return response;
+        }
+
+        private Expression<Func<Book, object>> GetSortProperty(GetAllBooksQuery request)
+        {
+            return request.SortColumn switch
+            {
+                "id" => b => b.Id,
+                "title" => b => b.Title,
+                "author" => b => b.Author,
+                "category" => b => b.Category,
+                "price" => b => b.Price,
+                _ => b => b.Title
+            };
         }
 
         public async Task<BookResponseModel> GetBookByIdCachedAsync(Guid bookId)
@@ -48,6 +95,7 @@ namespace BookCatalogService.Infrastructure.Repositories
                 book.Title, 
                 book.Author, 
                 book.Price, 
+                book.Category,
                 book.PublishedAt, 
                 book.StockQuantity);
 

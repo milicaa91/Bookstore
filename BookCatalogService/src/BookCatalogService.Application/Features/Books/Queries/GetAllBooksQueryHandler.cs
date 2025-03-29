@@ -1,4 +1,5 @@
 ﻿using BookCatalogService.Application.Interfaces.Repositories;
+using Common.Exceptions;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BookCatalogService.Application.Features.Books.Queries
 {
-    public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, IEnumerable<BookResponseModel>>
+    public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, GetAllBooksResponse>
     {
         private readonly IBookRepository _bookRepository;
 
@@ -17,20 +18,12 @@ namespace BookCatalogService.Application.Features.Books.Queries
             _bookRepository = bookRepository;
         }
 
-        public async Task<IEnumerable<BookResponseModel>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
+        public async Task<GetAllBooksResponse> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
         {
-            var books = await _bookRepository.GetAllAsync();
+            if (request.PageNumber <= 0 || request.PageNumber <= 0)
+                throw new BadRequestException("Page index and page size should be greater than zero!");
 
-            var bookDtos = books.Select(book => new BookResponseModel(
-                book.Id,
-                book.Title,
-                book.Author,
-                book.Price,
-                book.PublishedAt,
-                book.StockQuantity
-            ));
-
-            return bookDtos;
+            return await _bookRepository.GetPagedBooksAsync(request);
         }
     }
 }

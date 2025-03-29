@@ -3,12 +3,16 @@ using BookCatalogService.Application.Features.Books.Commands.AddBook;
 using BookCatalogService.Application.Features.Books.Commands.DeleteBook;
 using BookCatalogService.Application.Features.Books.Commands.UpdateBook;
 using BookCatalogService.Application.Features.Books.Queries;
+using BookCatalogService.Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 using System.Threading;
 
 namespace BookCatalogService.API.Controllers
 {
+    [Authorize(Policy = "AdminOperatorPolicy")]
     [ApiController]
     [Route("api/books")]
     public class BookController : ControllerBase
@@ -19,20 +23,24 @@ namespace BookCatalogService.API.Controllers
             _sender = sender;
         }
 
-        //TODO GET /api/books?page=1&pageSize=10&searchFilter=authorName
+        [Authorize(Policy = "AdminOperatorUserPolicy")]
         [HttpGet]
-        public async Task<ActionResult> GetAllBooks([FromQuery] int pageIndex = 1,[FromQuery] int pageSize = 10, 
-            [FromQuery] string searchFilter = null, CancellationToken cancellationToken = default )
+        public async Task<ActionResult> GetAllBooks([FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10, 
+            [FromQuery] string title = null, 
+            [FromQuery] string author = null, 
+            [FromQuery] Category category = 0, 
+            [FromQuery] string sortColumn = null, 
+            [FromQuery] string sortOrder = null, 
+            CancellationToken cancellationToken = default )
         {
-            if (pageIndex <= 0 || pageSize <= 0)
-                return BadRequest("Page index and page size should be greater than zero!");
-
-            var query = new GetAllBooksQuery(pageIndex, pageSize, searchFilter);
+            var query = new GetAllBooksQuery(pageNumber, pageSize, title,author, category, sortColumn, sortOrder);
             var result = await _sender.Send(query, cancellationToken);
 
             return Ok(result);
         }
 
+        [Authorize(Policy = "AdminOperatorUserPolicy")]
         [HttpGet("{id}")]
         public async Task<ActionResult<BookResponseModel>> GetBookById(Guid id, CancellationToken cancellationToken)
         {

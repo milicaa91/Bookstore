@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BookCatalogService.Domain.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,13 @@ namespace BookCatalogService.Application.Features.Books.Queries
 {
     public class BookResponseModel
     {
-        public BookResponseModel(Guid id, string title, string author, decimal price, DateTime publishedAt, int stockQuantity)
+        public BookResponseModel(Guid id, string title, string author, decimal price, Category category, DateTime publishedAt, int stockQuantity)
         {
             Id = id;
             Title = title;
             Author = author;
             Price = price;
+            Category = category;
             PublishedAt = publishedAt;
             StockQuantity = stockQuantity;
         }
@@ -31,7 +33,10 @@ namespace BookCatalogService.Application.Features.Books.Queries
 
         [JsonProperty("Price")]
         public decimal Price { get; init; }
-        //public string Genre { get; init; } //TODO MN
+
+        [JsonProperty("Category")]
+        public Category Category { get; init; }
+
         [JsonProperty("PublishedAt")]
         public DateTime PublishedAt { get; init; } //TODO MN converter
 

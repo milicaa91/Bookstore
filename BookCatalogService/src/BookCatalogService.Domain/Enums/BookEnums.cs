@@ -18,6 +18,8 @@ namespace BookCatalogService.Domain.Enums
         Mystery = 8,
         Romance = 9,
         Thriller = 10,
-        Children = 11
+        Children = 11,
+        Classics = 12,
+        Literature = 13
     }
 }
