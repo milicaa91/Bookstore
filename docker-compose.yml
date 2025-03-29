@@ -26,6 +26,19 @@ services:
     depends_on:
     - sqlserver
 
+  ordermanagementservice.api:
+    image: ${DOCKER_REGISTRY-}ordermanagementserviceapi
+    build:
+      context: .
+      dockerfile: OrderManagementService/src/OrderManagementService.API/Dockerfile
+    ports:
+    - 7000:7000
+    - 7001:7001
+    environment:
+    - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=OrderDB;User Id=sa;Password=82_WUc@@jAOeRee8;TrustServerCertificate=True
+    depends_on:
+    - sqlserver
+
   sqlserver:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     container_name: sqlserver.container
@@ -61,3 +74,4 @@ volumes:
     sqlserver_data:
     redis_data:
         driver: local
+
