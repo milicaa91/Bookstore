@@ -1,6 +1,7 @@
 using Common.Middlewares;
 using Microsoft.Extensions.DependencyInjection;
 using OrderManagementService.API.Extensions;
+using OrderManagementService.Application.Extensions;
 using OrderManagementService.Infrastructure.Extensions;
 using Serilog;
 
@@ -14,7 +15,7 @@ builder.Services.AddCorsApp();
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);
 
-//builder.Services.AddApplication();
+builder.Services.AddApplication();
 
 builder.Services.AddControllers();
 
