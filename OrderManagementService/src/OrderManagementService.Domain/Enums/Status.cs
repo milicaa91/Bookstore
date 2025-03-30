@@ -16,6 +16,15 @@ namespace OrderManagementService.Domain.Enums
         Refunded = 6,    
         Shipped = 7,     
         Delivered = 8,  
-        OnHold = 9        
+        OnHold = 9,
+        Processed = 10
+    }
+
+    public enum EventType
+    {
+        OrderCreated = 1,
+        OrderUpdated = 2,
+        OrderDeleted = 3,
+        OrderStatusChanged = 4
     }
 }

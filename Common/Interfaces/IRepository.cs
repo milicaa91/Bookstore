@@ -12,13 +12,6 @@ namespace Common.Interfaces
         Task<TEntity?> GetByIdAsync(TId id);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);//dynmaic query
-
-        Task<(IEnumerable<TEntity> Items, int TotalCount)> GetPagedAsync(
-            Expression<Func<TEntity, bool>>? predicate = null,
-            int pageNumber = 1,
-            int pageSize = 10,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null);
-
         Task AddAsync(TEntity entity);
         void Update(TEntity entity);
         void Remove(TEntity entity);

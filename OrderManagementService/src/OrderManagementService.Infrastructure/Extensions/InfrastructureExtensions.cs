@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using OrderManagementService.Domain.Interfaces;
+using OrderManagementService.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,8 @@ namespace OrderManagementService.Infrastructure.Extensions
             services.AddDbContext<OrderDbContext>(
                 options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                 x => x.MigrationsAssembly(typeof(OrderDbContext).Assembly.FullName)));
+            
+            services.AddScoped<IOrderRepository, OrderRepository>();
 
             return services;
         }

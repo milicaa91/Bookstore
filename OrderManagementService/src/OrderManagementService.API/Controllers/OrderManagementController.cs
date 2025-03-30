@@ -22,8 +22,7 @@ namespace OrderManagementService.API.Controllers
         [HttpPost]
         public async Task<ActionResult> AddOrder([FromBody] AddOrderRequest addOrderRequest, CancellationToken cancellationToken)
         {
-            var addOrderCommand = new AddOrderCommand(addOrderRequest.UserId, addOrderRequest.CreatedAt, addOrderRequest.Total,
-                addOrderRequest.Status, addOrderRequest.Items);
+            var addOrderCommand = new AddOrderCommand(addOrderRequest.UserId, addOrderRequest.Items);
 
             var result = await _sender.Send(addOrderCommand, cancellationToken);
             return Ok(result);

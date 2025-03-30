@@ -9,11 +9,11 @@ namespace OrderManagementService.Domain.Entities
 {
     public class Order
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string UserId { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }= DateTime.UtcNow;
         public decimal Total { get; set; }
-        public Status Status { get; set; } 
+        public Status Status { get; set; } = Status.Pending;
 
         public List<OrderItem> Items { get; set; }
     }

@@ -13,6 +13,7 @@ namespace OrderManagementService.Infrastructure
     {
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<OutboxEvent> OutboxEvents { get; set; }
 
         public OrderDbContext(DbContextOptions<OrderDbContext> options) : base(options) { }
 
@@ -23,19 +24,34 @@ namespace OrderManagementService.Infrastructure
                 entity.HasKey(o => o.Id);
                 entity.Property(o => o.Total).HasColumnType("decimal(18,2)");
                 entity.Property(o => o.Status).IsRequired();
+                entity.Property(o => o.Total).IsRequired();
+                entity.Property(o => o.CreatedAt).IsRequired();
 
                 entity.HasMany(o => o.Items)
-                  .WithOne(i => i.Order)
-                  .HasForeignKey(i => i.OrderId)
-                  .OnDelete(DeleteBehavior.Cascade); // Cascade delete order items if order is deleted
+                   .WithOne()
+                   .HasForeignKey(i => i.OrderId) 
+                   .OnDelete(DeleteBehavior.Cascade);
             });
 
             modelBuilder.Entity<OrderItem>(entity =>
             {
                 entity.HasKey(oi => oi.Id);
                 entity.Property(oi => oi.Price).HasColumnType("decimal(18,2)");
+
+                entity.Property(o => o.BookId).IsRequired();
+                entity.Property(o => o.Quantity).IsRequired();
+                entity.Property(o => o.Price).IsRequired();
+
+                //entity.HasOne<Order>()
+                //       .WithMany(o => o.Items)
+                //      .HasForeignKey(oi => oi.OrderId)
+                //      .OnDelete(DeleteBehavior.Cascade);
             });
 
+            modelBuilder.Entity<OutboxEvent>(entity =>
+            {
+                entity.HasKey(oi => oi.Id);
+            });
         }
     }
 }

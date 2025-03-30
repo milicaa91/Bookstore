@@ -11,17 +11,11 @@ namespace OrderManagementService.Application.Features.Orders.Commands.AddOrder
     public class AddOrderCommand : IRequest<Guid>
     {
         public string UserId { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public decimal Total { get; set; }
-        public Status Status { get; set; }
-        public List<OrderItem> Items { get; set; }
+        public List<OrderedItem> Items { get; set; }
 
-        public AddOrderCommand(string userId, DateTime createdAt, decimal total, Status status, List<OrderItem> items)
+        public AddOrderCommand(string userId, List<OrderedItem> items)
         {
             UserId = userId;
-            CreatedAt = createdAt;
-            Total = total;
-            Status = status;
             Items = items;
         }
     }

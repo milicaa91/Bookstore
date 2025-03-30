@@ -6,7 +6,8 @@
       "serviceActions": {
         "authenticationservice.api": "StartDebugging",
         "bookcatalogservice.api": "StartDebugging",
-        "ordermanagementservice.api": "StartDebugging"
+        "ordermanagementservice.api": "StartDebugging",
+        "ordermanagementservice.background": "StartDebugging"
       }
     }
   }

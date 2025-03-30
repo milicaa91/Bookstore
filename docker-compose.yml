@@ -36,31 +36,55 @@ services:
     - 7001:7001
     environment:
     - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=OrderDB;User Id=sa;Password=82_WUc@@jAOeRee8;TrustServerCertificate=True
+    - RabbitMQ__EventBusConnection=order-queue
     depends_on:
     - sqlserver
+    - rabbitmq
+  
+
+  # ordermanagementservice.background:
+  #   image: ${DOCKER_REGISTRY-}ordermanagementservicebackground
+  #   build:
+  #     context: .
+  #     dockerfile: OrderManagementService/src/OrderManagementService.Background/Dockerfile
+  #   depends_on:
+  #     - rabbitmq
+  #   networks:
+  #     - app-network
 
   sqlserver:
     image: "mcr.microsoft.com/mssql/server:2022-latest"
     container_name: sqlserver.container
     ports:
-      - "1433:1433"
+      - 1433:1433
     environment:
       SA_PASSWORD: "82_WUc@@jAOeRee8"
       ACCEPT_EULA: "Y"
     restart: always
     volumes:
       - sqlserver_data:/var/opt/mssql
-  
+ 
   redis:
     image: redis:latest
     container_name: redis.cache
     ports:
-      - "6379:6379"
+      - 6379:6379
     restart: always
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redis_data:/data 
 
+  rabbitmq:
+     image: rabbitmq:3-management
+     container_name: order.rabbitmq
+     hostname: order-queue
+     ports:
+      - 5672:5672
+      - 15672:15672
+     environment:
+         RABBITMQ_DEFAULT_USER: guest
+         RABBITMQ_DEFAULT_PASS: guest
+ 
   seq:
     image: datalust/seq:latest
     container_name: seq.log

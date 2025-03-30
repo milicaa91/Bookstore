@@ -7,14 +7,14 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookCatalogService.Infrastructure.Repositories
+namespace OrderManagementService.Infrastructure.Repositories
 {
     public class Repository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : class
     {
-        protected readonly BookDbContext _context;
+        protected readonly OrderDbContext _context;
         protected readonly DbSet<TEntity> _dbSet;
 
-        public Repository(BookDbContext context)
+        public Repository(OrderDbContext context)
         {
             _context = context;
             _dbSet = context.Set<TEntity>();

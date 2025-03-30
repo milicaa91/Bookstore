@@ -8,8 +8,7 @@ namespace OrderManagementService.Domain.Entities
 {
     public class OrderItem
     {
-        public Guid Id { get; set; }
-        public Order Order { get; set; }
+        public Guid Id { get; set; } = new Guid();
         public Guid OrderId { get; set; }
         public Guid BookId { get; set; }
         public int Quantity { get; set; } 
