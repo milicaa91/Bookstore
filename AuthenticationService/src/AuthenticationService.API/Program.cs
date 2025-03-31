@@ -34,7 +34,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     await app.ApplyMigrations();
-    await app.SeedRolesAndAdminAsync();
+    await app.SeedRolesAndAdminAsync(builder.Configuration);
     app.UseCors("AllowAll");
 }
 else

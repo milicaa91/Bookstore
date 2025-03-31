@@ -1,11 +1,12 @@
 ﻿using AuthenticationService.Domain.Entities;
+using AuthenticationService.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace AuthenticationService.API.Extensions
 {
     public static class SeedRolesAndAdminExtensions
     {
-        public static async Task SeedRolesAndAdminAsync(this WebApplication app)
+        public static async Task SeedRolesAndAdminAsync(this WebApplication app, IConfiguration configuration)
         {
             using (var scope = app.Services.CreateScope())
             {
@@ -20,7 +21,7 @@ namespace AuthenticationService.API.Extensions
 
                     await SeedRolesAsync(roleManager);
 
-                    await SeedAdminUserAsync(userManager);
+                    await SeedAdminUserAsync(userManager, configuration);
 
                     logger.LogInformation("Seeding completed successfully");
                 }
@@ -34,7 +35,7 @@ namespace AuthenticationService.API.Extensions
 
         private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
         {
-            var roles = new[] { "Admin", "Operator", "User" };
+            var roles = new[] { nameof(Role.Admin), nameof(Role.Operator), nameof(Role.User) };
 
             foreach (var role in roles)
             {
@@ -45,26 +46,26 @@ namespace AuthenticationService.API.Extensions
             }
         }
 
-        private static async Task SeedAdminUserAsync(UserManager<ApplicationUser> userManager)
+        private static async Task SeedAdminUserAsync(UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
-            const string adminEmail = "adminuser@gmail.com"; //TODO MN move to appsettings
+            var adminEmail = configuration["Admin:Email"] ?? string.Empty;
 
             if (await userManager.FindByEmailAsync(adminEmail) == null)
             {
                 var admin = new ApplicationUser
                 {
                     Id = Guid.NewGuid().ToString(),
-                    UserName = "admin",
-                    FullName = "Admin User",
+                    UserName = configuration["Admin:UserName"],
+                    FullName = configuration["Admin:FullName"],
                     Email = adminEmail,
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(admin, "str0ngP@ssw0rd!");
+                var result = await userManager.CreateAsync(admin, configuration["Admin:Password"]);
 
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(admin, "Admin");
+                    await userManager.AddToRoleAsync(admin, nameof(Role.Admin));
                 }
             }
         }
