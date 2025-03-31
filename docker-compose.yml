@@ -40,17 +40,6 @@ services:
     depends_on:
     - sqlserver
     - rabbitmq
-  
-
-  # ordermanagementservice.background:
-  #   image: ${DOCKER_REGISTRY-}ordermanagementservicebackground
-  #   build:
-  #     context: .
-  #     dockerfile: OrderManagementService/src/OrderManagementService.Background/Dockerfile
-  #   depends_on:
-  #     - rabbitmq
-  #   networks:
-  #     - app-network
 
   sqlserver:
     image: "mcr.microsoft.com/mssql/server:2022-latest"

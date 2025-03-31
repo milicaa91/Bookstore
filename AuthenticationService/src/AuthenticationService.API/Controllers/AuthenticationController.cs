@@ -23,18 +23,16 @@ namespace AuthenticationService.API.Controllers
     [Route("api/auth")]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly ISender _sender;
 
-        public AuthenticationController(IConfiguration configuration, ISender sender)
+        public AuthenticationController(ISender sender)
         {
-            _configuration = configuration;
             _sender = sender;
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<int>> RegisterUser([FromBody] AddUserRequest request, CancellationToken cancellationToken)
+        public async Task<ActionResult<Guid>> RegisterUser([FromBody] AddUserRequest request, CancellationToken cancellationToken)
         {
             var addUserCommand = new AddUserCommand(request.Username, request.Password, request.Email, request.FullName);
             var result = await _sender.Send(addUserCommand, cancellationToken);

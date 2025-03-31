@@ -48,6 +48,9 @@ namespace Common.Middlewares
                 KeyNotFoundException => (int)HttpStatusCode.NotFound,
                 NotFoundException => (int)HttpStatusCode.NotFound,
                 BadRequestException => (int)HttpStatusCode.BadRequest,
+                UserAlreadyExistException => (int)HttpStatusCode.BadRequest,
+                UserNotFoundException => (int)HttpStatusCode.NotFound,
+                RoleNotFoundException => (int)HttpStatusCode.NotFound,
                 _ => (int)HttpStatusCode.InternalServerError
             };
 
