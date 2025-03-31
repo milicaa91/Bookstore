@@ -5,6 +5,7 @@ using OrderManagementService.Application.Interfaces.Repositories;
 using OrderManagementService.Domain.Entities;
 using OrderManagementService.Domain.Enums;
 using OrderManagementService.Domain.Events;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,7 +64,9 @@ namespace OrderManagementService.Infrastructure.Repositories
         }
         public async Task<GetOrderDetailsResponse> GetOrderById(Guid id)
         {
-            var order = await base.GetByIdAsync(id);
+            var order = await _context.Orders
+                .Include(o => o.Items)
+                .FirstOrDefaultAsync(o => o.Id == id);
 
             if (order is null)
                 throw new KeyNotFoundException($"Order with id {id} not found.");
