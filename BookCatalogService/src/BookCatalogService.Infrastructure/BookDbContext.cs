@@ -18,7 +18,7 @@ namespace BookCatalogService.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Book>().HasKey(b => b.Id); //TODO MN add HasKey
+            modelBuilder.Entity<Book>().HasKey(b => b.Id);
 
             modelBuilder.Entity<Book>()
             .Property(b => b.Title)

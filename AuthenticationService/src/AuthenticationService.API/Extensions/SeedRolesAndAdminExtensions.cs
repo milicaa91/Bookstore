@@ -11,7 +11,7 @@ namespace AuthenticationService.API.Extensions
             {
                 var services = scope.ServiceProvider;
 
-                var logger = services.GetRequiredService<ILogger<Program>>();//TODO MN logger??
+                var logger = services.GetRequiredService<ILogger<Program>>();
 
                 try
                 {

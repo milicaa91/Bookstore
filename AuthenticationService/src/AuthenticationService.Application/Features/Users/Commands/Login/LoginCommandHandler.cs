@@ -84,7 +84,7 @@ namespace AuthenticationService.Application.Features.Users.Commands.Login
 
         }
 
-        private void ValidateRequest(LoginCommand request) //TODO move to a validator
+        private void ValidateRequest(LoginCommand request)
         {
             if (request == null)
                 throw new BadRequestException($"Request missing data");

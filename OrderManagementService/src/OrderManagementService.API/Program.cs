@@ -29,11 +29,8 @@ builder.Services.AddMassTransit(x =>
 
         cfg.Host(configuration["RabbitMQ:EventBusConnection"], h =>
         {
-            h.Username(configuration["RabbitMQ:Username"]); //TODO add options
-            h.Password(configuration["RabbitMQ:Password"]);
-           
-            // Additional host settings if needed
-            h.Heartbeat(TimeSpan.FromSeconds(60));
+            h.Username(configuration["RabbitMQ:Username"]);
+            h.Password(configuration["RabbitMQ:Password"]);           
         });
 
         cfg.ReceiveEndpoint("order-queue", e =>

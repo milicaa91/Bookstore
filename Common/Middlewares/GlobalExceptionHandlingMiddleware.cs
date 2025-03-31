@@ -43,7 +43,7 @@ namespace Common.Middlewares
 
             var statusCode = exception switch
             {
-                ArgumentException => (int)HttpStatusCode.BadRequest, //TODO MN cutom exceptions
+                ArgumentException => (int)HttpStatusCode.BadRequest,
                 UnauthorizedAccessException => (int)HttpStatusCode.Unauthorized,
                 KeyNotFoundException => (int)HttpStatusCode.NotFound,
                 NotFoundException => (int)HttpStatusCode.NotFound,

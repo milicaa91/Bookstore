@@ -10,6 +10,7 @@ using System.Collections.Generic;
 
 namespace OrderManagementService.API.Controllers
 {
+    [Authorize(Policy = "AdminOperatorUserPolicy")]
     [Route("api/orders")]
     public class OrderManagementController : ControllerBase
     {

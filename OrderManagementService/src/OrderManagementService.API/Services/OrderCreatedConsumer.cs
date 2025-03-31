@@ -24,7 +24,6 @@ namespace OrderManagementService.API.Services
 
             _logger.LogInformation($"OrderCreatedEvent received: OrderId {orderEvent.OrderId}");
 
-            //TODO Simulated logic: Update stock, send notifications, etc.
             var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderEvent.OrderId);
 
             if (order != null)

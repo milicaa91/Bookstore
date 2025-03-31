@@ -20,7 +20,7 @@ namespace OrderManagementService.Infrastructure.Repositories
             _dbSet = context.Set<TEntity>();
         }
 
-        public async Task<TEntity?> GetByIdAsync(TId id)//TODO should this be virtual for testing
+        public async Task<TEntity?> GetByIdAsync(TId id)
         {
             return await _dbSet.FindAsync(id);
         }

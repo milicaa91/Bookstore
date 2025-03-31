@@ -13,7 +13,7 @@ namespace AuthenticationService.Infrastructure.Repositories
 {
     public class Repository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : class
     {
-        protected readonly ApplicationDbContext _context;  //TODO Changed to protected for testability
+        protected readonly ApplicationDbContext _context;
         protected readonly DbSet<TEntity> _dbSet;
 
         public Repository(ApplicationDbContext context)
@@ -22,7 +22,7 @@ namespace AuthenticationService.Infrastructure.Repositories
             _dbSet = context.Set<TEntity>();
         }
 
-        public virtual async Task<TEntity?> GetByIdAsync(TId id)//TODO should this be virtual for testing
+        public virtual async Task<TEntity?> GetByIdAsync(TId id)
         {
             return await _dbSet.FindAsync(id);
         }

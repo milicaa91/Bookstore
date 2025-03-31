@@ -39,7 +39,7 @@ namespace AuthenticationService.Application.Features.Users.Commands.Register
 
             user = new ApplicationUser
             {
-                Id = Guid.NewGuid().ToString(),//TODO maybe "NEWID()"
+                Id = Guid.NewGuid().ToString(),
                 UserName = request.Username,
                 Email = request.Email,
                 FullName = request.FullName
@@ -69,7 +69,7 @@ namespace AuthenticationService.Application.Features.Users.Commands.Register
             return Guid.Parse(user.Id);
         }
 
-        private void ValidateRequest(AddUserCommand request) //TODO move to a validator
+        private void ValidateRequest(AddUserCommand request)
         {
             if (request == null)
                 throw new BadRequestException($"Request missing data");

@@ -47,6 +47,14 @@ namespace OrderManagementService.Infrastructure.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
                 };
             });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOperatorUserPolicy", policy =>
+                    policy.RequireRole("Admin", "Operator", "User"));
+
+            });
+
             return services;
         }
     }

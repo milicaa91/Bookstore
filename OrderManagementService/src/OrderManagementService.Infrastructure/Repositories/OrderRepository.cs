@@ -13,14 +13,17 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace OrderManagementService.Infrastructure.Repositories
 {
     public class OrderRepository : Repository<Order, Guid>, IOrderRepository
     {
         //TODO cache for order details private readonly IDistributedCache _cache;
-        public OrderRepository(OrderDbContext context) : base(context)
+        ILogger<OrderRepository> _logger;
+        public OrderRepository(OrderDbContext context, ILogger<OrderRepository> logger) : base(context)
         {
+            _logger = logger;
         }
         public async Task<Guid> CreateOrder(Order order)
         {
@@ -58,7 +61,7 @@ namespace OrderManagementService.Infrastructure.Repositories
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                //TODO : Log exception
+                _logger.LogError($"Failed to create order: {ex.Message}");
                 throw;
             }
         }
