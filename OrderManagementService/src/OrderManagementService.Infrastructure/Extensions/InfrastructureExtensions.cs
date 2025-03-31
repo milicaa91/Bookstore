@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using OrderManagementService.Domain.Interfaces;
+using OrderManagementService.Application.Interfaces.Repositories;
 using OrderManagementService.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;

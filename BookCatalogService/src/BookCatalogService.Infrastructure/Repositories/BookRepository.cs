@@ -86,10 +86,10 @@ namespace BookCatalogService.Infrastructure.Repositories
             if (cachedBook is not null)
                 return JsonSerializer.Deserialize<BookResponseModel>(cachedBook);
 
-            var book = base.GetByIdAsync(bookId).Result;
+            var book = await base.GetByIdAsync(bookId);
 
             if (book is null)
-                return null;
+                throw new KeyNotFoundException($"Book with id {bookId} not found.");
 
             var bookModel = new BookResponseModel(book.Id, 
                 book.Title, 

@@ -2,10 +2,10 @@
 using MassTransit;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using OrderManagementService.Application.Interfaces.Repositories;
 using OrderManagementService.Domain.Entities;
 using OrderManagementService.Domain.Enums;
 using OrderManagementService.Domain.Events;
-using OrderManagementService.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,20 +45,9 @@ namespace OrderManagementService.Application.Features.Orders.Commands.AddOrder
                 }).ToList()
             };
 
-            await _orderRepository.CreateOrderAsync(order);
+            await _orderRepository.CreateOrder(order);
 
-            //TODO delete
-            //try
-            //{
-            //    await _bus.Publish(orderCreatedEvent, cancellationToken);
-            //    _logger.LogInformation($"Published OrderCreatedEvent for order ID: {order.Id}");
-            //}
-            //catch (Exception ex)
-            //{
-            //    _logger.LogInformation($"Failed to publish event: {ex.Message}");
-            //}
-
-            return order.Id; //TODO : Return response
+            return order.Id;
         }
     }
 }

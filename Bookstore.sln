@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagementService.Doma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagementService.API", "OrderManagementService\src\OrderManagementService.API\OrderManagementService.API.csproj", "{B729A239-1D78-4599-8ABB-EA4E3E0B4292}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookCatalogService.UnitTests", "BookCatalogService\test\BookCatalogService.UnitTests\BookCatalogService.UnitTests.csproj", "{E85FC03D-B902-4309-83B2-B21ACBD8A3AC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +121,10 @@ Global
 		{B729A239-1D78-4599-8ABB-EA4E3E0B4292}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B729A239-1D78-4599-8ABB-EA4E3E0B4292}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B729A239-1D78-4599-8ABB-EA4E3E0B4292}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E85FC03D-B902-4309-83B2-B21ACBD8A3AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E85FC03D-B902-4309-83B2-B21ACBD8A3AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E85FC03D-B902-4309-83B2-B21ACBD8A3AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E85FC03D-B902-4309-83B2-B21ACBD8A3AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -144,5 +150,6 @@ Global
 		{E6A862FA-CCE4-4803-A080-D3CCA0A1BE91} = {C2210E62-38E9-4A31-9C80-CCB59E452981}
 		{91DBF041-DB28-4456-86AB-215BA7EB3648} = {C2210E62-38E9-4A31-9C80-CCB59E452981}
 		{B729A239-1D78-4599-8ABB-EA4E3E0B4292} = {C2210E62-38E9-4A31-9C80-CCB59E452981}
+		{E85FC03D-B902-4309-83B2-B21ACBD8A3AC} = {9128D021-BE32-4CAF-961B-C705D428801D}
 	EndGlobalSection
 EndGlobal

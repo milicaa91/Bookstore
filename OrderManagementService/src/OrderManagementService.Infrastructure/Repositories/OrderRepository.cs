@@ -1,9 +1,10 @@
 ﻿using Common.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
+using OrderManagementService.Application.Features.Orders.Queries;
+using OrderManagementService.Application.Interfaces.Repositories;
 using OrderManagementService.Domain.Entities;
 using OrderManagementService.Domain.Enums;
 using OrderManagementService.Domain.Events;
-using OrderManagementService.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace OrderManagementService.Infrastructure.Repositories
         public OrderRepository(OrderDbContext context) : base(context)
         {
         }
-        public async Task<Guid> CreateOrderAsync(Order order)
+        public async Task<Guid> CreateOrder(Order order)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
 
@@ -59,6 +60,27 @@ namespace OrderManagementService.Infrastructure.Repositories
                 //TODO : Log exception
                 throw;
             }
+        }
+        public async Task<GetOrderDetailsResponse> GetOrderById(Guid id)
+        {
+            var order = await base.GetByIdAsync(id);
+
+            if (order is null)
+                throw new KeyNotFoundException($"Order with id {id} not found.");
+
+            var orderModel = new GetOrderDetailsResponse(order.Id,
+                order.UserId,
+                order.Status,
+                order.CreatedAt,
+                order.Total,
+                order.Items.Select(item => new OrderItemResponse
+                {
+                    ItemId = item.Id,
+                    Quantity = item.Quantity,
+                    Price = item.Price
+                }).ToList());
+
+            return orderModel;
         }
     }
 }
