@@ -18,6 +18,9 @@ using LoginRequest = AuthenticationService.Application.Features.Users.Commands.L
 
 namespace AuthenticationService.API.Controllers
 {
+    /// <summary>
+    /// Controller for managing authentication.
+    /// </summary>   
     [Authorize]
     [ApiController]
     [Route("api/auth")]
@@ -30,6 +33,12 @@ namespace AuthenticationService.API.Controllers
             _sender = sender;
         }
 
+        /// <summary>
+        /// Registers a new user.
+        /// </summary>
+        /// <param name="request">The user registration request.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The ID of the newly registered user.</returns>
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<Guid>> RegisterUser([FromBody] AddUserRequest request, CancellationToken cancellationToken)
@@ -40,6 +49,12 @@ namespace AuthenticationService.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Logs in a user.
+        /// </summary>
+        /// <param name="loginRequest">The login request containing username and password.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The login response containing tokens.</returns>
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> LoginUser(LoginRequest loginRequest, CancellationToken cancellationToken)
@@ -50,9 +65,14 @@ namespace AuthenticationService.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Fetches details of the currently logged-in user.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The details of the logged-in user.</returns>
         [HttpGet("me")]
         public async Task<ActionResult<GetUserDetailsResponse>> FetchLoggedUser(CancellationToken cancellationToken)
-        {            
+        {
             var userIdClaim = User?.FindFirst(ClaimTypes.NameIdentifier);
 
             if (userIdClaim == null)
@@ -67,6 +87,13 @@ namespace AuthenticationService.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Updates the role of a user.
+        /// </summary>
+        /// <param name="id">The ID of the user whose role is to be updated.</param>
+        /// <param name="request">The request containing the new role.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The number of affected rows.</returns>
         [Authorize(Roles = "Admin")]
         [HttpPut("roles/{id}")]
         public async Task<ActionResult<int>> UpdateRole(Guid id, [FromBody] UpdateRoleRequest request, CancellationToken cancellationToken)
@@ -77,6 +104,12 @@ namespace AuthenticationService.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Generates Access and Refresh token.
+        /// </summary>
+        /// <param name="refreshToken">The refresh token request.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The new access and refresh tokens.</returns>
         [AllowAnonymous]
         [HttpPost("refresh")]
         public async Task<ActionResult<AddRefreshTokenResponse>> RefreshToken([FromBody] AddRefreshTokenRequest refreshToken, CancellationToken cancellationToken)
@@ -87,6 +120,11 @@ namespace AuthenticationService.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Logs out the currently logged-in user.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>An IActionResult indicating the result of the logout operation.</returns>
         [HttpPost("logout")]
         public async Task<IActionResult> Logout(CancellationToken cancellationToken)
         {
@@ -99,7 +137,7 @@ namespace AuthenticationService.API.Controllers
                 return BadRequest("Invalid user ID");
 
             var logoutCommand = new LogoutCommand(userId.ToString());
-            var result = await _sender.Send(logoutCommand, cancellationToken);          
+            var result = await _sender.Send(logoutCommand, cancellationToken);
 
             return Ok(result);
         }
